@@ -1,9 +1,8 @@
 
 ## Introduction
-This is a pose estimation method based on pixel-wise voting. This method is based on PVNet and is improved. Therefore I provide a link to **PVNet**（https://github.com/zju3dv/clean-pvnet） for review, and thanks again to Peng et al. for their excellent work.  
+This code is a pose estimation method based on pixel-wise voting strategy. Our proposed method is improved based on PVNet. So we provide PVNet here for reference(https://github.com/zju3dv/clean-pvnet), and thanks again to Peng et al. for their excellent work.
 
-
-I made the following change：  
+We made the following change：  
 - [x]  A DDL loss for learning unit vector-field is proposed for PVNet weak constraints
 
 

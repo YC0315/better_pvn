@@ -1,0 +1,30 @@
+# wait    3090
+model: 'cat_v0'
+model_dir: 'data/model'
+network: 'res'
+heads: ''
+task: 'pvnet'
+gpus: (0, 1, 2, 3)
+resume: true
+
+train:
+    optim: 'adam'
+    lr: 1e-3  
+    epoch: 240
+    milestones: (40, 80, 120, 160, 200, 220, 240, 260, 280, 300, 320, 340)
+    gamma: 0.65
+    batch_size: 16
+    dataset: 'LinemodTrain'
+    cropresize_rate: 1.0
+    rotate_rate: 1.0
+    rotate_min: -30
+    rotate_max: 30
+    weight_decay: 0.
+    batch_sampler: 'image_size'
+
+# 可视化时，可以改数据集，可视化不同效果
+test:
+    dataset: 'LinemodTest'
+    #dataset: 'LinemodOccTest'
+    batch_size: 1
+    batch_sampler: 'image_size'

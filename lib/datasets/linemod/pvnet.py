@@ -31,11 +31,6 @@ class Dataset(data.Dataset):
         path = self.coco.loadImgs(int(img_id))[0]['file_name']
         inp = Image.open(path)
         kpt_2d = np.concatenate([anno['fps_2d'], [anno['center_2d']]], axis=0)
-        #真实关键点的位置
-        #with open('/data1/yangchao_1/clean-pvnet-master/yc/cat/ape/ape_gt_kpt_2d.txt', 'a') as outfile:
-            #np.savetxt(outfile,kpt_2d, fmt = '%f', delimiter = ',')
-        
-
         cls_idx = linemod_config.linemod_cls_names.index(anno['cls']) + 1
         mask = pvnet_data_utils.read_linemod_mask(anno['mask_path'], anno['type'], cls_idx)
 
@@ -71,8 +66,6 @@ class Dataset(data.Dataset):
         foreground = np.sum(mask)
         # randomly mask out to add occlusion
         if foreground > 0:
-        
-            #img = bright(img)  #训练阶段降低了亮度!!!!!!!!!!!!
             
             img, mask, hcoords = rotate_instance(img, mask, hcoords, 
                                                          self.cfg.train.rotate_min, 
@@ -87,9 +80,7 @@ class Dataset(data.Dataset):
         kpt_2d = hcoords[:, :2]
 
         return img, kpt_2d, mask
-        
-        
-    #自己添加的
+
     def augment1(self, img):
         img = np.asarray(img).astype(np.uint8)
         img2 = bright(img)

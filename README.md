@@ -10,7 +10,7 @@ I made the following change：
 ## Training and Testing
 The code for installation, network training, and testing can be found in the PVNet link in the introduction section. The training and testing commands are shown below:<br>
 
-### Take the training on cat as an example
+### Take the benchvise as an example
 1. Prepare the data related to `benchvise`:<br>
     
     >python run.py --type linemod cls_type benchvise

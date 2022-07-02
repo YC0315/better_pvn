@@ -8,29 +8,6 @@ import os
 import numpy as np
 import torchsnooper
 
- 
-# 自己添加的loss           
-def distence_loss(vertex_pred, vertex_true, vertex_weights): 
-
-    b, vertex_dim, h, w =vertex_pred.shape
-    dx = vertex_pred[:, 0::2]
-    #print('dx.shape',dx.shape)
-    dy = vertex_pred[:, 1::2]
-    vertex_norm = torch.sqrt(dx*dx + dy*dy + 1e-8)
-    dx = dx/(vertex_norm+1e-4)
-    dy = dy/(vertex_norm+1e-4)
-    #print("dx",dx.shape)
-    gx = vertex_true[:, 0::2]
-    gy = vertex_true[:, 1::2]
-    dist_loss = torch.sqrt(((gx - dx) ** 2) +((gy - dy) ** 2))*vertex_weights
-    sigma = 1.0
-    beta = 1. / (sigma ** 2)
-    smoothL1_sign = (dist_loss < beta)
-    dist_loss = torch.where(smoothL1_sign, 0.5 * (sigma*dist_loss) ** 2, dist_loss - 0.5 / (sigma **2))
-    dist_loss = torch.mean(torch.sum(dist_loss.view(b, -1), dim=1) / (vertex_dim/2 * torch.sum(vertex_weights.view(b,-1), dim=1) + 1e-8) )
-    #print('dist_loss',dist_loss)
-    return dist_loss 
-
 
 class Trainer(object):
     def __init__(self, network):
@@ -64,8 +41,8 @@ class Trainer(object):
             output, loss, loss_stats, image_stats, weight = self.network(batch)
 
 
-            dist_loss = distence_loss(output['vertex'], batch['vertex'], weight)
-            loss += dist_loss * 0.01 * np.min([1.5 ** epoch, 10])
+            dist_loss = distence_loss(output, batch)
+            loss += dist_loss
 
 
             loss_stats.update({'dist_loss': dist_loss, 'loss':loss})    
